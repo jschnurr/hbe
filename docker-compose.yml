@@ -1,0 +1,8 @@
+version: '2'
+services:
+  hbe-python-data:
+    build:
+      context: .
+      dockerfile: hbe-python-data.dockerfile
+    ports:
+      - "8888:8888"
