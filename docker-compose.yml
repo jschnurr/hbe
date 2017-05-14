@@ -6,3 +6,6 @@ services:
       dockerfile: hbe-python-data.dockerfile
     ports:
       - "8888:8888"
+    volumes:
+      # CHANGE ~/dev to your project path on the host machine
+      - ~/dev:/data

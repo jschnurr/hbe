@@ -14,7 +14,13 @@ Once HBE is started, you can use Hydrogen to connect to a ***Connect to Remote K
 1. Clone the repo, and build the Docker containers:  
 `git clone git@github.com:jschnurr/hydrogen-back-end.git`  
 `docker-compose build`  
-2. Configure the Hydrogen package to use HBE back-ends. The configuration section is called ***Kernel Gateways***, and should be set as follows:
+2. Modify docker-compose.yml to specify the directory on your host machine where the container /DATA folder will be mapped.  
+```yml
+volumes:
+  # CHANGE ~/dev to your project path on the host machine
+  - ~/dev:/data
+```  
+3. Configure the Hydrogen package to use HBE back-ends. The configuration section is called ***Kernel Gateways***, and should be set as follows:
 ``` json
 [{
   "name": "HBE-Python-Data",
@@ -35,6 +41,18 @@ Start the HBE services, and then connect to them with Hydrogen.
 
 `CTRL-C` (or `docker-compose down` if run as daemon) will stop the services.
 
+## Host System File Access
+Code run in Hydrogen executes inside the container. If that running code needs to read or write data, use the `/data` path to reference the host machine, as per the mapping you configured in the `installation` section.
+
+By default, these are the same file:
+- `/data/project1/data.json` <-- as referenced in your source code
+- `~/dev/project1/data.json` <-- the actual file on your host system
+
+## Running Commands inside the Container
+If you need to run a command in the container (i.e. from a prompt), try this:  
+
+`$ docker ps`, and find the `name` of the container you wish to connect to.  
+`docker exec -it hydrogenbackend_hbe-python-data_1 touch /data/project1/alpha.json`
 
 ## Available Kernels
 - ***HBE-Python-Data*** - Python for data science and machine learning applications. Includes [Anaconda](https://hub.docker.com/r/continuumio/anaconda/) + [TensorFlow](https://www.tensorflow.org/).
